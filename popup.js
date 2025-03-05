@@ -16,7 +16,6 @@ function logMessage(text) {
     logContainer.scrollTop = logContainer.scrollHeight;
 }
 
-// Ensure the event listener is added only once
 chrome.runtime.onMessage.addListener((request) => {
     if (request.log) {
         logMessage(request.log);
@@ -37,7 +36,7 @@ document.getElementById('start').addEventListener('click', async () => {
 
     let sentCount = 0;
     const totalCount = numbers.length;
-    const estimatedTimePerMessage = 8; // In seconds (adjust as needed)
+    const estimatedTimePerMessage = 8;
     let totalRemainingTime = totalCount * estimatedTimePerMessage;
 
     function updateRemainingTime() {
@@ -74,9 +73,8 @@ document.getElementById('start').addEventListener('click', async () => {
             logMessage(`⏳ Opening chat for: ${number}...`);
             chrome.tabs.update(tabId, { url: whatsappURL });
 
-            await new Promise(resolve => setTimeout(resolve, 8000)); // Reduced from 8 sec to 5 sec
+            await new Promise(resolve => setTimeout(resolve, 8000));
 
-            // Execute content script once per message
             await chrome.scripting.executeScript({
                 target: { tabId: tabId },
                 args: [decodeURIComponent(message)],
@@ -95,7 +93,7 @@ document.getElementById('start').addEventListener('click', async () => {
                     while (retries > 0) {
                         messageInput = document.querySelector('div[contenteditable="true"][aria-label="Type a message"]');
                         if (messageInput) break;
-                        await new Promise(r => setTimeout(r, 400)); // Reduced interval
+                        await new Promise(r => setTimeout(r, 400));
                         retries--;
                     }
 
@@ -108,7 +106,7 @@ document.getElementById('start').addEventListener('click', async () => {
                     messageInput.innerHTML = "";
                     messageInput.focus();
                     document.execCommand("insertText", false, message);
-                    await new Promise(r => setTimeout(r, 800)); // Reduced from 1 sec to 0.8 sec
+                    await new Promise(r => setTimeout(r, 800));
 
                     sendLogToPopup("✅ Message typed. Sending...");
 
@@ -120,7 +118,7 @@ document.getElementById('start').addEventListener('click', async () => {
                         bubbles: true
                     }));
 
-                    await new Promise(r => setTimeout(r, 1000)); // Wait 1 sec to confirm sent
+                    await new Promise(r => setTimeout(r, 1000));
 
                     sendLogToPopup(`✅ Message sent to ${window.location.href}`);
                 }
@@ -131,7 +129,7 @@ document.getElementById('start').addEventListener('click', async () => {
             updateRemainingTime();
 
             if (i < numbers.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 5000)); // Reduced from 5 sec to 3 sec
+                await new Promise(resolve => setTimeout(resolve, 5000));
             }
         }
 
