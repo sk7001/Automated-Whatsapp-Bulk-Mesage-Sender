@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { width: 400px; padding: 10px; font-family: Arial; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; }
+        button { padding: 10px 20px; background: #25D366; color: white; border: none; cursor: pointer; }
+        
+        #numberCount { margin-bottom: 10px; font-weight: bold; }
+        #status {
+            margin-top: 10px;
+            max-height: 150px; /* Prevents overflow */
+            overflow-y: auto;  /* Enables scrolling */
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace; /* Improves log readability */
+            white-space: pre-line; /* Ensures proper new lines */
+            height: 150px; /* Fixed size */
+        }
+        #progress {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h3>WhatsApp Bulk Messenger</h3>
+    <textarea id="numbers" placeholder="Enter phone numbers (comma/new lines)"></textarea>
+    <div id="numberCount">Total Numbers: 0</div>
+    <textarea id="message" placeholder="Enter your message"></textarea>
+    <button id="start">Start Sending</button>
+    <div id="status"></div>
+    <div id="progress">Sent: 0 | Remaining: 0</div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
