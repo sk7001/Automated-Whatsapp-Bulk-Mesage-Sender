@@ -7,6 +7,8 @@ document.getElementById('numbers').addEventListener('input', () => {
 });
 
 const logContainer = document.getElementById('status');
+const timeRemainingEl = document.getElementById('timeRemaining');
+
 function logMessage(text) {
     let logEntry = document.createElement('div');
     logEntry.textContent = text;
@@ -35,7 +37,27 @@ document.getElementById('start').addEventListener('click', async () => {
 
     let sentCount = 0;
     const totalCount = numbers.length;
-    document.getElementById('progress').innerText = `Sent: ${sentCount} | Remaining: ${totalCount - sentCount}`;
+    const estimatedTimePerMessage = 8; // In seconds (adjust as needed)
+    let totalRemainingTime = totalCount * estimatedTimePerMessage;
+
+    function updateRemainingTime() {
+        const hours = String(Math.floor(totalRemainingTime / 3600)).padStart(2, '0');
+        const minutes = String(Math.floor((totalRemainingTime % 3600) / 60)).padStart(2, '0');
+        const seconds = String(totalRemainingTime % 60).padStart(2, '0');
+        timeRemainingEl.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    updateRemainingTime();
+    document.getElementById('progress').firstElementChild.innerText = `Sent: ${sentCount} | Remaining: ${totalCount - sentCount}`;
+
+    const timerInterval = setInterval(() => {
+        if (totalRemainingTime > 0) {
+            totalRemainingTime--;
+            updateRemainingTime();
+        } else {
+            clearInterval(timerInterval);
+        }
+    }, 1000);
 
     chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
         if (tabs.length === 0) {
@@ -105,13 +127,16 @@ document.getElementById('start').addEventListener('click', async () => {
             });
 
             sentCount++;
-            document.getElementById('progress').innerText = `Sent: ${sentCount} | Remaining: ${totalCount - sentCount}`;
+            document.getElementById('progress').firstElementChild.innerText = `Sent: ${sentCount} | Remaining: ${totalCount - sentCount}`;
+            updateRemainingTime();
 
             if (i < numbers.length - 1) {
                 await new Promise(resolve => setTimeout(resolve, 3000)); // Reduced from 5 sec to 3 sec
             }
         }
 
+        clearInterval(timerInterval);
+        timeRemainingEl.textContent = "00:00:00";
         logMessage("🎉 ✅ All messages sent!");
     });
 });
