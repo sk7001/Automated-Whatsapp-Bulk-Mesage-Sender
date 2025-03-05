@@ -74,7 +74,7 @@ document.getElementById('start').addEventListener('click', async () => {
             logMessage(`⏳ Opening chat for: ${number}...`);
             chrome.tabs.update(tabId, { url: whatsappURL });
 
-            await new Promise(resolve => setTimeout(resolve, 5000)); // Reduced from 8 sec to 5 sec
+            await new Promise(resolve => setTimeout(resolve, 7000)); // Reduced from 8 sec to 5 sec
 
             // Execute content script once per message
             await chrome.scripting.executeScript({
@@ -131,7 +131,7 @@ document.getElementById('start').addEventListener('click', async () => {
             updateRemainingTime();
 
             if (i < numbers.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 3000)); // Reduced from 5 sec to 3 sec
+                await new Promise(resolve => setTimeout(resolve, 5000)); // Reduced from 5 sec to 3 sec
             }
         }
 
